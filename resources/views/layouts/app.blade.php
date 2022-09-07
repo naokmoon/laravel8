@@ -8,6 +8,12 @@
 </head>
 <body>
     <div>
+        @if(session('status'))
+            <div style="background: red; color:white;">
+                {{ session('status') }}
+            </div>
+            <br/>
+        @endif
         @yield('content')
     </div>
 </body>
