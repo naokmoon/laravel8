@@ -36,17 +36,34 @@ class PostController extends Controller
      */
     public function store(StorePost $request)
     {
+        // Validation from basic Request class object
+        //
+        //--- Basic way
         // $request->validate([
         //     'title' => 'bail|required|min:5|max:100',
         //     'content' => 'required|min:10'
         // ]);
-        $model = $request->validated();
-        $post = new BlogPost();
+        // $post = new BlogPost();  // * Can also use BlogPost::make();
         // $post->title = $request->input('title');
-        // $post->content = $request->input('content');.
-        $post->title = $model['title'];
-        $post->content = $model['content'];
-        $post->save();
+        // $post->content = $request->input('content');
+        // $post->save();
+        //--- Lazy way
+        // $model = $request->validate([
+        //     'title' => 'bail|required|min:5|max:100',
+        //     'content' => 'required|min:10'
+        // ]);
+        // $post = BlogPost::create($model); // * Easier, but requires $fillable property to be setted
+
+        // Validation from a new make:request StorePost class object with a rules() function
+        //
+        $model = $request->validated();
+        //--- Basic way without $fillable property
+        // $post = new BlogPost();
+        // $post->title = $model['title'];
+        // $post->content = $model['content'];
+        // $post->save();
+        //--- Lazy way
+        $post = BlogPost::create($model); // * Easier, but requires $fillable property to be setted
 
         $request->session()->flash('status', 'The blog post was created!');
 
@@ -74,7 +91,7 @@ class PostController extends Controller
      */
     public function edit($id)
     {
-        //
+        return view('posts.edit', ['post' => BlogPost::findOrFail($id)]);
     }
 
     /**
@@ -84,9 +101,17 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(StorePost $request, $id)
     {
-        //
+        $post = BlogPost::findOrFail($id);
+
+        $model = $request->validated();
+        $post->fill($model);
+        $post->save();
+
+        $request->session()->flash('status', 'The blog post was updated!');
+
+        return redirect()->route('posts.show', ['post' => $post->id]);
     }
 
     /**
@@ -97,6 +122,11 @@ class PostController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $post = BlogPost::findOrFail($id);
+        $post->delete();
+
+        session()->flash('status', 'The blog post #' . $id . ' was deleted!');
+
+        return redirect()->route('posts.index');
     }
 }
