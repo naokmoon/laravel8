@@ -5,11 +5,15 @@
 @section('content')
     <h2>Liste des posts</h2>
 
-    <table class="table table-striped">
+    <a href="{{ route('posts.create') }}" class="btn btn-primary mb-2">Add a blog post</a>
+
+    <table class="table table-sm table-striped">
         <tr>
             <th>Id</th>
             <th>Title</th>
             <th>Content</th>
+            <th></th>
+            <th></th>
             <th></th>
         </tr>
         @each('posts.partials.post', $posts, 'post')
@@ -21,3 +25,12 @@
         @endforelse --}}
     </table>
 @endsection
+
+<script>
+    function confirmDelete() {
+        if (!confirm("Are you sure to delete this?")) {
+            event.preventDefault();
+        }
+    }
+</script>
+

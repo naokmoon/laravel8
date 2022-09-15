@@ -11,8 +11,12 @@
         @method('PUT')
 
         @include('posts.partials.form')
-        <div>
-            <input type="submit" value="Save">
+
+        <div class="d-flex mt-2">
+            <input type="submit" value="Save" class="btn btn-primary">
+            <div class="ml-2">
+                <a href="{{ route('posts.index') }}" class="btn btn-light">Cancel</a>
+            </div>
         </div>
     </form>
 @endsection

@@ -1,27 +1,24 @@
-        {{-- @break($key == 2) --}}
-        {{-- @continue($key == 1) --}}
-
-
-{{--
-    @if($loop->even)
+<tr>
+    <td>{{ $post->id }}</td>
+    <td>{{ $post->title }}</td>
+    <td>{{ $post->content }}</td>
+    <td>
         <div>
-    @else
-        <div style="background-color: silver;">
-    @endif --}}
-
-    <tr>
-        <td>{{ $post->id }}</td>
-        <td>{{ $post->title }}</td>
-        <td>{{ $post->content }}</td>
-        <td>
-            <div>
-                <form action="{{ route('posts.destroy', ['post' => $post->id]) }}" method="POST">
-                    @csrf
-                    @method('DELETE')
-                    <input type="submit" value="Delete">
-                </form>
-            </div>
-        </td>
-    </tr>
-
-    {{-- </div> --}}
+            <a href="{{ route('posts.show', ['post' => $post->id]) }}" class="btn btn-light"><i class="fa fa-eye" title="View"></i></a>
+        </div>
+    </td>
+    <td>
+        <div>
+            <a href="{{ route('posts.edit', ['post' => $post->id]) }}" class="btn btn-primary"><i class="fa fa-edit" title="Edit"></i></a>
+        </div>
+    </td>
+    <td>
+        <div>
+            <form action="{{ route('posts.destroy', ['post' => $post->id]) }}" method="POST">
+                @csrf
+                @method('DELETE')
+                <button type="submit"  onclick="confirmDelete()" class="btn btn-danger"><i class="fa fa-trash" title="Delete"></i></button>
+            </form>
+        </div>
+    </td>
+</tr>

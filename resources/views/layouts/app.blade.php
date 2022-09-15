@@ -4,17 +4,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="stylesheet" href="{{ mix('css/app.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/app.css') }}">
     <script src="{{ mix('js/app.js')}}" defer></script>
     <title>Laravel App - @yield('title')</title>
 </head>
 <body>
-    <div>
+    <div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 bg-white border-bottom shadow-sm">
+        <h5 class="my-0 mr-md-auto">Laravel App</h5>
+        <nav class="mt-2 mt-md-0 mr-md-3">
+            <a class="p-2 text-dark" href="{{ route('home.index') }}">Home</a>
+            <a class="p-2 text-dark" href="{{ route('home.contact') }}">Contact</a>
+            <a class="p-2 text-dark" href="{{ route('posts.index') }}">Blog Posts</a>
+        </nav>
+    </div>
+    <div class="container">
         @if(session('status'))
-            <div style="background: red; color:white;">
+            <div class="alert alert-success mb-2" role="alert">
                 {{ session('status') }}
             </div>
-            <br/>
         @endif
         @yield('content')
     </div>

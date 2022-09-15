@@ -37,6 +37,10 @@ Route::get('/', [HomeController::class, 'home'])
 Route::get('/contact', [HomeController::class, 'contact'])
     ->name('home.contact');
 
+Route::get('/bs-flex', function() {
+    return view('bootstrap-flex');
+})->name('bs-flex');
+
 Route::get('/single', AboutController::class);
 
 Route::resource('posts', PostController::class)
