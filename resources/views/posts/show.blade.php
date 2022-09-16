@@ -12,4 +12,6 @@
             <strong>New!</strong>
         </div>
     @endif
+
+    <a href="{{ route('posts.index') }}" class="btn btn-primary mt-4">Go back</a>
 @endsection

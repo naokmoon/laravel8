@@ -9,7 +9,7 @@
     </td>
     <td>
         <div>
-            <a href="{{ route('posts.edit', ['post' => $post->id]) }}" class="btn btn-primary"><i class="fa fa-edit" title="Edit"></i></a>
+            <a href="{{ route('posts.edit', ['post' => $post->id]) }}" class="btn btn-primary"><i class="fa fa-pencil" title="Edit"></i></a>
         </div>
     </td>
     <td>
@@ -17,7 +17,7 @@
             <form action="{{ route('posts.destroy', ['post' => $post->id]) }}" method="POST">
                 @csrf
                 @method('DELETE')
-                <button type="submit"  onclick="confirmDelete()" class="btn btn-danger"><i class="fa fa-trash" title="Delete"></i></button>
+                <button type="submit"  onclick="confirmDelete()" class="btn btn-danger"><i class="fa fa-trash-o" title="Delete"></i></button>
             </form>
         </div>
     </td>

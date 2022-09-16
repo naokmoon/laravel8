@@ -3,9 +3,9 @@
 @section('title',  'Blog Posts')
 
 @section('content')
-    <h2>Liste des posts</h2>
+    <h2>Posts</h2>
 
-    <a href="{{ route('posts.create') }}" class="btn btn-primary mb-2">Add a blog post</a>
+    <a href="{{ route('posts.create') }}" class="btn btn-success mb-2"><i class="fa fa-plus"></i> Create post</a>
 
     <table class="table table-sm table-striped">
         <tr>
