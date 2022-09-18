@@ -5,7 +5,21 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\AboutController;
 use App\Http\Controllers\PostController;
-use App\Models\BlogPost;
+
+$posts = [
+    1 => [
+        'title' => 'Intro to Laravel',
+        'content' => 'This is a short intro to Laravel'
+    ],
+    2 => [
+        'title' => 'Intro to PHP',
+        'content' => 'This is a short intro to PHP'
+    ],
+    2 => [
+        'title' => 'A 3rd post for testing purpose',
+        'content' => 'This is just another post'
+    ]
+];
 
 /*
 |--------------------------------------------------------------------------
@@ -61,8 +75,6 @@ Route::resource('posts', PostController::class)
 // //     'id' => '[0-9]+'
 // // ])
 //     ->name('posts.show');
-
-$posts = BlogPost::all();
 
 Route::get('/recent-posts/{days_ago?}', function ($daysAgo=20) {
     return "Posts from $daysAgo days ago";

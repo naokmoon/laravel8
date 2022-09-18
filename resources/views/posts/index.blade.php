@@ -7,7 +7,8 @@
 
     <a href="{{ route('posts.create') }}" class="btn btn-success mb-2"><i class="fa fa-plus"></i> Create post</a>
 
-    <table class="table table-sm table-striped">
+    @if (count($posts) > 0)
+        <table class="table table-sm table-striped">
         <tr>
             <th>Id</th>
             <th>Title</th>
@@ -17,13 +18,16 @@
             <th></th>
         </tr>
         @each('posts.partials.post', $posts, 'post')
+        </table>
+    @else
+        <br>No blog posts yet!
+    @endif
 
         {{-- @forelse ($posts as $key => $post)
             @include('posts.partials.post')
         @empty
-            No posts found!
+            No blog posts yet!
         @endforelse --}}
-    </table>
 @endsection
 
 <script>
