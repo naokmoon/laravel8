@@ -28,13 +28,16 @@
         @empty
             No blog posts yet!
         @endforelse --}}
+
+    {{-- JS --}}
+    <script>
+        function confirmDelete() {
+            if (!confirm("Are you sure to delete this?")) {
+                event.preventDefault();
+            }
+        }
+    </script>
 @endsection
 
-<script>
-    function confirmDelete() {
-        if (!confirm("Are you sure to delete this?")) {
-            event.preventDefault();
-        }
-    }
-</script>
+
 

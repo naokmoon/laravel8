@@ -17,7 +17,7 @@
             <form action="{{ route('posts.destroy', ['post' => $post->id]) }}" method="POST">
                 @csrf
                 @method('DELETE')
-                <button type="submit"  onclick="confirmDelete()" class="btn btn-danger"><i class="fa fa-trash-o" title="Delete"></i></button>
+                <button type="submit" onclick="confirmDelete()" class="btn btn-danger"><i class="fa fa-trash-o" title="Delete"></i></button>
             </form>
         </div>
     </td>
