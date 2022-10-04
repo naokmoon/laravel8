@@ -9,7 +9,7 @@
     <title>Laravel App - @yield('title')</title>
 </head>
 <body>
-    <div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 bg-white border-bottom shadow-sm">
+    <div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 bg-white border-bottom shadow-sm mb-2">
         <h5 class="my-0 mr-md-auto"><a href="{{ route('home.index') }}" style="color:black;">Laravel App</a></h5>
         <nav class="mt-2 mt-md-0 mr-md-3">
             <a class="p-2 text-dark" href="{{ route('home.index') }}">Home</a>

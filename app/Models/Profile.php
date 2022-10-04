@@ -11,6 +11,6 @@ class Profile extends Model
 
     public function author()
     {
-        return $this->belongsTo('App\Models\Author');
+        return $this->belongsTo(Author::class);
     }
 }
