@@ -13,6 +13,7 @@
             <th>Id</th>
             <th>Title</th>
             <th>Content</th>
+            <th>Nb. Comments</th>
             <th></th>
             <th></th>
             <th></th>

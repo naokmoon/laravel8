@@ -3,8 +3,9 @@
 namespace Tests\Feature;
 
 use Tests\TestCase;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use App\Models\Comment;
 use App\Models\BlogPost;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class PostTest extends TestCase
 {
@@ -31,6 +32,25 @@ class PostTest extends TestCase
         $this->assertDatabaseHas('blog_posts', [
             'title' => 'New title'
         ]);
+    }
+
+    public function testSee1BlogPostWithComments()
+    {
+        // Create Dummy BlogPost
+        $post = $this->createDummyBlogPost();
+        // Create 4 comments for the BlogPost
+        Comment::factory()->count(4)->create([
+            'blog_post_id' => $post->id
+        ]);
+
+        $this->assertDatabaseHas('blog_posts', [
+            'title' => 'New title'
+        ]);
+
+        $post = BlogPost::find($post->id); // Get post from DB with comments
+
+        $this->assertEquals(count($post->comments), 4); // Assert there are 4 comments found
+
     }
 
     public function testStoreValid()
@@ -107,11 +127,13 @@ class PostTest extends TestCase
 
     private function  createDummyBlogPost(): BlogPost
     {
-        $post = new BlogPost();
-        $post->title = "New title";
-        $post->content = "Content of the blog post";
-        $post->save();
+        // $post = new BlogPost();
+        // $post->title = "New title";
+        // $post->content = "Content of the blog post";
+        // $post->save();
 
-        return $post;
+        // return $post;
+        return BlogPost::factory()->dummyTest()->create();
+
     }
 }

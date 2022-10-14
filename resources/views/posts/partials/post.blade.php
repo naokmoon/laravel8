@@ -2,6 +2,7 @@
     <td>{{ $post->id }}</td>
     <td>{{ $post->title }}</td>
     <td>{{ $post->content }}</td>
+    <td>{{ $post->comments_count }}</td>
     <td>
         <div>
             <a href="{{ route('posts.show', ['post' => $post->id]) }}" class="btn btn-light"><i class="fa fa-eye" title="View"></i></a>

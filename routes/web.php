@@ -51,6 +51,8 @@ Route::get('/', [HomeController::class, 'home'])
 Route::get('/contact', [HomeController::class, 'contact'])
     ->name('home.contact');
 
+Auth::routes();
+
 Route::get('/bs-flex', function() {
     return view('bootstrap-flex');
 })->name('bs-flex');
@@ -110,8 +112,4 @@ Route::prefix('/fun')->name('fun.')->group(function() use ($posts) {
     Route::get('download', function() {
         return response()->download(public_path('/daniel.jpg'), 'face.jpg');
     })->name('download');
-});
-
-Route::get('testjdd', function() {
-    return "Hello TestJDD";
 });
