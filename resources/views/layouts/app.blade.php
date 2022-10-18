@@ -38,6 +38,9 @@
 
                     <!-- Right Side Of Navbar -->
                     <ul class="navbar-nav ml-auto">
+                        <a class="p-2 text-dark" href="{{ route('home.index') }}">Home</a>
+                        <a class="p-2 text-dark" href="{{ route('home.contact') }}">Contact</a>
+
                         <!-- Authentication Links -->
                         @guest
                             <li class="nav-item">
@@ -49,8 +52,6 @@
                                 </li>
                             @endif
                         @else
-                            <a class="p-2 text-dark" href="{{ route('home.index') }}">Home</a>
-                            <a class="p-2 text-dark" href="{{ route('home.contact') }}">Contact</a>
                             <a class="p-2 text-dark" href="{{ route('posts.index') }}">Blog Posts</a>
                             <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle text-dark" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>

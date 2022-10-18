@@ -60,7 +60,8 @@ class PostTest extends TestCase
             'content' => 'Atleast 10 characters'
         ];
         // Insert new blog post
-        $this->post('/posts', $params)
+        $this->actingAs($this->user())
+            ->post('/posts', $params)
             ->assertStatus(302)
             ->assertSessionHas('status');
         // Assert it has been inserted
@@ -74,7 +75,8 @@ class PostTest extends TestCase
             'title' => 'x',
             'content' => 'x'
         ];
-        $this->post('/posts', $params)
+        $this->actingAs($this->user())
+            ->post('/posts', $params)
             ->assertStatus(302)
             ->assertSessionHas('errors');
         // Assert we receive error messages
@@ -101,7 +103,9 @@ class PostTest extends TestCase
         // Update blog post
         $post->title = "A new named title";
         $post->content = "Content was changed";
-        $this->put("/posts/{$post->id}", $post->toArray())
+
+        $this->actingAs($this->user())
+            ->put("/posts/{$post->id}", $post->toArray())
             ->assertStatus(302)
             ->assertSessionHas('status');
         // Assert it has been updated
@@ -115,7 +119,8 @@ class PostTest extends TestCase
         $post = $this->createDummyBlogPost();
 
         // Delete blog post
-        $this->delete("/posts/{$post->id}")
+        $this->actingAs($this->user())
+            ->delete("/posts/{$post->id}")
             ->assertStatus(302)
             ->assertSessionHas('status');
         // Assert it is deleted
