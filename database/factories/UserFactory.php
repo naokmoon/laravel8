@@ -26,8 +26,23 @@ class UserFactory extends Factory
             'name' => $this->faker->name,
             'email' => $this->faker->unique()->safeEmail,
             'email_verified_at' => now(),
-            'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
+            'password' => '$2y$10$3ZrYOZCa1beRgcBE3kLF5uNnxYtgfr4h/eyepAxQJRXESQOXNbx6W', // secret123
             'remember_token' => Str::random(10),
         ];
+    }
+
+    /**
+     * Create John Doe user
+     *
+     * @return \Illuminate\Database\Eloquent\Factories\Factory
+     */
+    public function johnDoe()
+    {
+        return $this->state(function (array $attributes) {
+            return [
+                'name' => 'John Doe',
+                'email' => 'john@laravel.test',
+            ];
+        });
     }
 }

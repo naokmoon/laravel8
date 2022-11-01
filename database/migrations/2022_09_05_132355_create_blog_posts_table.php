@@ -18,7 +18,7 @@ class CreateBlogPostsTable extends Migration
                 $table->id();
                 $table->timestamps();
 
-                $table->string('title', 50)->default('');
+                $table->string('title', 100)->default('');
 
                 if (env('DB_CONNECTION') === "sqlite") {
                     $table->text('content')->default('');
