@@ -9,7 +9,7 @@ class Comment extends Model
 {
     use HasFactory;
 
-    public function blogPost()
+    public function blogPost($a, $b, $bonjour)
     {
         return $this->belongsTo(BlogPost::class);
     }
