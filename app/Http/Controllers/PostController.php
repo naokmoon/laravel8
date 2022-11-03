@@ -8,6 +8,15 @@ use App\Http\Requests\StorePost;
 // use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 
+// Mapping of Controller method and Policy name used for user authorization when using $this->authorize($post)
+// [
+//     'show' => 'view',
+//     'create' => 'create',
+//     'store' => 'create',
+//     'edit' => 'update',
+//     'update' => 'update',
+//     'destroy' => 'delete',
+// ]
 class PostController extends Controller
 {
     public function __construct()
@@ -45,6 +54,9 @@ class PostController extends Controller
      */
     public function create()
     {
+        // $this->authorize('posts.create'); // Using Gate::resource ... Could be activated...
+        // $this->authorize('create'); // Simplifier ability name using registerPolicies()
+        // $this->authorize($post); // Magic way using registerPolicies()
         return view('posts.create');
     }
 
@@ -56,6 +68,10 @@ class PostController extends Controller
      */
     public function store(StorePost $request)
     {
+        // $this->authorize('posts.create'); // Using Gate::resource ... Could be activated...
+        // $this->authorize('create'); // Simplifier ability name using registerPolicies()
+        // $this->authorize($post); // Magic way using registerPolicies()
+
         // Validation from basic Request class object
         //
         //--- Basic way
@@ -77,6 +93,9 @@ class PostController extends Controller
         // Validation from a new make:request StorePost class object with a rules() function
         //
         $model = $request->validated();
+        $model['user_id'] = $request->user()->id;
+
+
         //--- Basic way without $fillable property
         // $post = new BlogPost();
         // $post->title = $model['title'];
@@ -116,7 +135,10 @@ class PostController extends Controller
         // if (Gate::denies('update-post', $post)) {
         //     abort(403, "You can't edit this blog post!");
         // }
-        $this->authorize('update-post', $post);
+        // $this->authorize('update-post', $post);
+        // $this->authorize('posts.update', $post);
+        // $this->authorize('update', $post); // Simplifier ability name using registerPolicies()
+        $this->authorize($post); // Magic way using registerPolicies()
 
         return view('posts.edit', ['post' => $post]);
     }
@@ -135,7 +157,10 @@ class PostController extends Controller
         // if (Gate::denies('update-post', $post)) {
         //     abort(403, "You can't edit this blog post!");
         // }
-        $this->authorize('update-post', $post);
+        // $this->authorize('posts.update', $post);
+        // $this->authorize('update', $post); // Simplifier ability name using registerPolicies()
+        $this->authorize($post); // Simplest magic way using registerPolicies(), passing Model
+                                 // guessing which policy to call and which method
 
         $model = $request->validated();
         $post->fill($model);
@@ -159,7 +184,9 @@ class PostController extends Controller
         // if (Gate::denies('update-post', $post)) {
         //     abort(403, "You can't delete this blog post!");
         // }
-        $this->authorize('delete-post', $post);
+        // $this->authorize('posts.delete', $post);
+        // $this->authorize('delete', $post); // Simplifier ability name using registerPolicies()
+        $this->authorize($post); // Magic way using registerPolicies()
 
         $post->delete();
 

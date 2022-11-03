@@ -11,16 +11,24 @@
     </td>
     <td>
         <div>
-            <a href="{{ route('posts.edit', ['post' => $post->id]) }}" class="btn btn-primary"><i class="fa fa-pencil" title="Edit"></i></a>
+            @can('update', $post)
+                <a href="{{ route('posts.edit', ['post' => $post->id]) }}" class="btn btn-primary"><i class="fa fa-pencil" title="Edit"></i></a>
+            @endcan
         </div>
     </td>
     <td>
         <div>
-            <form action="{{ route('posts.destroy', ['post' => $post->id]) }}" method="POST">
-                @csrf
-                @method('DELETE')
-                <button type="submit" onclick="confirmDelete()" class="btn btn-danger"><i class="fa fa-trash-o" title="Delete"></i></button>
-            </form>
+            {{-- @cannot('delete', $post)
+                <p>You can't delete this post</p>
+            @endcannot --}}
+
+            @can('delete', $post)
+                <form action="{{ route('posts.destroy', ['post' => $post->id]) }}" method="POST">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" onclick="confirmDelete()" class="btn btn-danger"><i class="fa fa-trash-o" title="Delete"></i></button>
+                </form>
+            @endcan
         </div>
     </td>
 </tr>

@@ -22,7 +22,7 @@ class CommentsTableSeeder extends Seeder
 
         $commentsCount = (int)$this->command->ask('How many comments would you like?', 150);
 
-        \App\Models\Comment::factory($commentsCount)->make()->each(function($comment) use ($posts) {
+        \App\Models\Comment::factory($commentsCount)->make()->each(function ($comment) use ($posts) {
             $comment->blog_post_id = $posts->random()->id; // Pige un post random et recupere son ID
             $comment->save();
         });

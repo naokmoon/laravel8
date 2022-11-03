@@ -28,6 +28,7 @@ class UserFactory extends Factory
             'email_verified_at' => now(),
             'password' => '$2y$10$3ZrYOZCa1beRgcBE3kLF5uNnxYtgfr4h/eyepAxQJRXESQOXNbx6W', // secret123
             'remember_token' => Str::random(10),
+            'is_admin' => false
         ];
     }
 
@@ -42,6 +43,7 @@ class UserFactory extends Factory
             return [
                 'name' => 'John Doe',
                 'email' => 'john@laravel.test',
+                'is_admin' => true
             ];
         });
     }

@@ -4,6 +4,8 @@ namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 
+use function PHPSTORM_META\map;
+
 class BlogPostFactory extends Factory
 {
     /**
@@ -15,7 +17,8 @@ class BlogPostFactory extends Factory
     {
         return [
             'title' => $this->faker->sentence(5),
-            'content' => $this->faker->paragraph(5, true)
+            'content' => $this->faker->paragraph(5, true),
+            'created_at' => $this->faker->dateTimeBetween('-3 months'),
         ];
     }
 

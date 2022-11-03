@@ -50,7 +50,6 @@ class PostTest extends TestCase
         $post = BlogPost::find($post->id); // Get post from DB with comments
 
         $this->assertEquals(count($post->comments), 4); // Assert there are 4 comments found
-
     }
 
     public function testStoreValid()
@@ -88,7 +87,8 @@ class PostTest extends TestCase
     public function testUpdateValid()
     {
         // Arrange
-        $post = $this->createDummyBlogPost();
+        $user = $this->user();
+        $post = $this->createDummyBlogPost($user->id);
         $this->assertDatabaseHas('blog_posts', [
             'title' => 'New title',
             'content' => 'Content of the blog post'
@@ -104,7 +104,7 @@ class PostTest extends TestCase
         $post->title = "A new named title";
         $post->content = "Content was changed";
 
-        $this->actingAs($this->user())
+        $this->actingAs($user)
             ->put("/posts/{$post->id}", $post->toArray())
             ->assertStatus(302)
             ->assertSessionHas('status');
@@ -116,10 +116,11 @@ class PostTest extends TestCase
 
     public function testDeletePost()
     {
-        $post = $this->createDummyBlogPost();
+        $user =$this->user();
+        $post = $this->createDummyBlogPost($user->id);
 
         // Delete blog post
-        $this->actingAs($this->user())
+        $this->actingAs($user)
             ->delete("/posts/{$post->id}")
             ->assertStatus(302)
             ->assertSessionHas('status');
@@ -130,7 +131,7 @@ class PostTest extends TestCase
         return $post;
     }
 
-    private function  createDummyBlogPost(): BlogPost
+    private function createDummyBlogPost($userId=null): BlogPost
     {
         // $post = new BlogPost();
         // $post->title = "New title";
@@ -138,7 +139,10 @@ class PostTest extends TestCase
         // $post->save();
 
         // return $post;
-        return BlogPost::factory()->dummyTest()->create();
-
+        return BlogPost::factory()->dummyTest()->create(
+            [
+                'user_id' => $userId ?? $this->user()->id,
+            ]
+        );
     }
 }

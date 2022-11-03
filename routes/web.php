@@ -1,10 +1,11 @@
 <?php
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
-use App\Http\Controllers\AboutController;
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\AboutController;
 
 $posts = [
     1 => [
@@ -46,14 +47,14 @@ $posts = [
 // Route::view('/contact', 'home.contact')
 //     ->name('home.contact');
 
-Route::get('/', [HomeController::class, 'index'])
-    ->name('home.index');
-Route::get('/home', [HomeController::class, 'index'])
-    ->name('home.index');
-Route::get('/contact', [HomeController::class, 'contact'])
-    ->name('home.contact');
+Route::get('/', [HomeController::class, 'index'])->name('home.index');
+Route::get('/home', [HomeController::class, 'index'])->name('home.index');
+Route::get('/contact', [HomeController::class, 'contact'])->name('home.contact');
+Route::get('/secret', [HomeController::class, 'secret'])
+    ->name('home.secret')
+    ->middleware('can:home.secret');
 
-Route::get('/bs-flex', function() {
+Route::get('/bs-flex', function () {
     return view('bootstrap-flex');
 })->name('bs-flex');
 
@@ -62,7 +63,7 @@ Route::get('/single', AboutController::class);
 Route::resource('posts', PostController::class)
     ->only(['index', 'show', 'create', 'store', 'edit', 'update', 'destroy']);
 
-// Route::get('/posts', function() use ($posts) {
+// Route::get('/posts', function () use ($posts) {
 //     // dd(request()->all());
 //     dd((int)request()->query('page', 1));
 //     return view('posts.index', ['posts' => $posts]);
@@ -82,34 +83,34 @@ Route::get('/recent-posts/{days_ago?}', function ($daysAgo=20) {
     return "Posts from $daysAgo days ago";
 })->name('posts.recent.index')->middleware('auth');
 
-Route::prefix('/fun')->name('fun.')->group(function() use ($posts) {
-    Route::get('responses', function() use ($posts) {
+Route::prefix('/fun')->name('fun.')->group(function () use ($posts) {
+    Route::get('responses', function () use ($posts) {
         return response($posts, 201)
             ->header('Content-Type', 'application/json')
             ->cookie('MY_COOKIE', 'Jean-Daniel Dumas', 3600);
     })->name('responses');
 
-    Route::get('redirect', function() {
+    Route::get('redirect', function () {
         return redirect('/contact');
     })->name('redirect');
 
-    Route::get('back', function() {
+    Route::get('back', function () {
         return back();
     })->name('back');
 
-    Route::get('named-route', function() {
+    Route::get('named-route', function () {
         return redirect()->route('posts.show', ['id' => 1]);
     })->name('named-route');
 
-    Route::get('away', function() {
+    Route::get('away', function () {
         return redirect()->away('https://google.com');
     })->name('away');
 
-    Route::get('json', function() use ($posts) {
+    Route::get('json', function () use ($posts) {
         return response()->json($posts);
     })->name('json');
 
-    Route::get('download', function() {
+    Route::get('download', function () {
         return response()->download(public_path('/daniel.jpg'), 'face.jpg');
     })->name('download');
 });

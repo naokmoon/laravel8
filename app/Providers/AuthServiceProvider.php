@@ -13,7 +13,7 @@ class AuthServiceProvider extends ServiceProvider
      * @var array
      */
     protected $policies = [
-        // 'App\Models\Model' => 'App\Policies\ModelPolicy',
+        'App\Models\BlogPost' => 'App\Policies\BlogPostPolicy',
     ];
 
     /**
@@ -25,12 +25,47 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
-        Gate::define('update-post', function ($user, $post) {
-            return $user->id == $post->user_id;
+        //########## NOTES ############################################
+        // MAGIC WAY !!!
+        // 1. Run cmd: "php artisan make:policy BlogPostPolicy --model=BlogPost"
+        // 2. Add this to $policies array:
+        //       'App\Models\BlogPost' => 'App\Policies\BlogPostPolicy',
+        //##############################################################
+
+        //-------------- BASIC WAY to define a Gate -------------------------------------------------
+        Gate::define('home.secret', function ($user) {
+            return $user->is_admin;
         });
 
-        Gate::define('delete-post', function ($user, $post) {
-            return $user->id == $post->user_id;
+        // Gate::define('update-post', function ($user, $post) {
+        //     return $user->id == $post->user_id;
+        // });
+
+        // Gate::define('delete-post', function ($user, $post) {
+        //     return $user->id == $post->user_id;
+        // });
+
+        //------------- ANOTHER WAY USING php artisan make:policy --model=BlogPost ---------------
+        // Gate::define('posts.update', 'App\Policies\BlogPostPolicy@update');
+        // Gate::define('posts.delete', 'App\Policies\BlogPostPolicy@delete');
+        // Gate::resource('posts', 'App\Policies\BlogPostPolicy'); // posts.create, posts.view,
+                                                                   // posts.update, posts.delete
+
+        /**
+         * This function is called before checkup of a Gate Definition.
+         */
+        Gate::before(function ($user, $ability) {
+            // Admin users are autorized to ByPass these specific Gate abilities by returning true.
+            if ($user->is_admin && in_array($ability, ['update', 'delete'])) {
+                return true;
+            }
         });
+
+        // /**
+        //  * This function is called after checkup of a Gate Definition.
+        //  */
+        // Gate::after(function ($user, $ability, $result) {
+        //     //
+        // });
     }
 }
