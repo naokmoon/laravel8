@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\BlogPost;
 use Illuminate\Http\Request;
-use App\Http\Requests\StorePost;
+use App\Http\Requests\PostRequest;
 // use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 
@@ -44,7 +44,11 @@ class PostController extends Controller
         // dd(DB::getQueryLog());
 
         // return view('posts.index', ['posts' => BlogPost::all()]);
-        return view('posts.index', ['posts' => BlogPost::withCount('comments')->get()]);
+        return view('posts.index',
+            [
+                'posts' => BlogPost::latest()->withCount('comments')->get(),
+                'mostCommented' => BlogPost::mostCommented()->take(5)->get()
+            ]);
     }
 
     /**
@@ -66,7 +70,7 @@ class PostController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StorePost $request)
+    public function store(PostRequest $request)
     {
         // $this->authorize('posts.create'); // Using Gate::resource ... Could be activated...
         // $this->authorize('create'); // Simplifier ability name using registerPolicies()
@@ -90,7 +94,7 @@ class PostController extends Controller
         // ]);
         // $post = BlogPost::create($model); // * Easier, but requires $fillable property to be setted
 
-        // Validation from a new make:request StorePost class object with a rules() function
+        // Validation from a new make:request PostRequest class object with a rules() function
         //
         $model = $request->validated();
         $model['user_id'] = $request->user()->id;
@@ -118,6 +122,12 @@ class PostController extends Controller
     public function show($id)
     {
         // abort_if(!isset($this->posts[$id]), 404);
+
+        // return view('posts.show', [
+        //     'post' => BlogPost::with(['comments' => function ($query) {
+        //         return $query->latest();
+        //      }])->findOrFail($id)
+        // ]);
 
         return view('posts.show', ['post' => BlogPost::with('comments')->findOrFail($id)]);
     }
@@ -150,7 +160,7 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(StorePost $request, $id)
+    public function update(PostRequest $request, $id)
     {
         $post = BlogPost::findOrFail($id);
 
