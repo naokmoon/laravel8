@@ -32,7 +32,15 @@
             @forelse ($posts as $post)
                 <p>
                     <h3>
-                        <a href="{{ route('posts.show', ['post' => $post->id]) }}">{{ $post->title }}</a>
+                        @if ($post->trashed())
+                            <del>
+                        @endif
+
+                        <a class="{{ $post->trashed() ? 'text-muted' : '' }}" href="{{ route('posts.show', ['post' => $post->id]) }}">{{ $post->title }}</a>
+
+                        @if ($post->trashed())
+                            </del>
+                        @endif
                     </h3>
 
                     <p class="text-muted">
@@ -59,13 +67,23 @@
                         @endcannot --}}
 
                         @can('delete', $post)
-                            <form method="POST" class="fm-inline ml-2"
-                                action="{{ route('posts.destroy', ['post' => $post->id]) }}">
-                                @csrf
-                                @method('DELETE')
+                            @if ($post->trashed())
+                                {{-- TODO add a restore button with confirm JS --}}
+                                {{-- <form method="POST" class="fm-inline ml-2"
+                                    action="{{ route('posts.restore', ['post' => $post->id]) }}">
+                                    @csrf
 
-                                <input type="submit" onclick="confirmDelete()" value="Delete" class="btn btn-sm btn-danger"/>
-                            </form>
+                                    <input type="submit" onclick="confirmRestore()" value="Restore" class="btn btn-sm btn-success"/>
+                                </form> --}}
+                            @else
+                                <form method="POST" class="fm-inline ml-2"
+                                    action="{{ route('posts.destroy', ['post' => $post->id]) }}">
+                                    @csrf
+                                    @method('DELETE')
+
+                                    <input type="submit" onclick="confirmDelete()" value="Delete" class="btn btn-sm btn-danger"/>
+                                </form>
+                            @endif
                         @endcan
                     </div>
                 </p>
@@ -74,22 +92,62 @@
             @endforelse
         </div>
         <div class="col-4">
-            <div class="card" style="width: 18rem;">
-                <div class="card-body">
-                    <h5 class="card-title">Most Commented</h5>
-                    <h6 class="card-subtitle mb-2 text-muted">
-                        What people are currently talking about
-                    </h6>
+            <div class="container">
+                <div class="row">
+                    <div class="card" style="width: 100%;">
+                        <div class="card-body">
+                            <h5 class="card-title">Most Commented</h5>
+                            <h6 class="card-subtitle mb-2 text-muted">
+                                What people are currently talking about
+                            </h6>
+                        </div>
+                        <ul class="list-group list-group-flush">
+                            @foreach ($mostCommented as $post)
+                                <li class="list-group-item">
+                                    <a href="{{ route('posts.show', ['post' => $post->id]) }}">
+                                        {{ $post->title }}
+                                    </a>
+                                </li>
+                            @endforeach
+                        </ul>
+                    </div>
                 </div>
-                <ul class="list-group list-group-flush">
-                    @foreach ($mostCommented as $post)
-                        <li class="list-group-item">
-                            <a href="{{ route('posts.show', ['post' => $post->id]) }}">
-                                {{ $post->title }}
-                            </a>
-                        </li>
-                    @endforeach
-                </ul>
+
+                <div class="row mt-4">
+                    <div class="card" style="width: 100%;">
+                        <div class="card-body">
+                            <h5 class="card-title">Most Active Users</h5>
+                            <h6 class="card-subtitle mb-2 text-muted">
+                                Users with most posts written
+                            </h6>
+                        </div>
+                        <ul class="list-group list-group-flush">
+                            @foreach ($mostActiveUsers as $user)
+                                <li class="list-group-item">
+                                    {{ $user->name }}
+                                </li>
+                            @endforeach
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="row mt-4">
+                    <div class="card" style="width: 100%;">
+                        <div class="card-body">
+                            <h5 class="card-title">Most Active Users Last Month</h5>
+                            <h6 class="card-subtitle mb-2 text-muted">
+                                Users with most posts written since last month
+                            </h6>
+                        </div>
+                        <ul class="list-group list-group-flush">
+                            @foreach ($mostActiveUsersLastMonth as $user)
+                                <li class="list-group-item">
+                                    {{ $user->name }}
+                                </li>
+                            @endforeach
+                        </ul>
+                    </div>
+                </div>
             </div>
         </div>
 

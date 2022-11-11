@@ -25,12 +25,30 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
-        //########## NOTES ############################################
+        //########## NOTES #####################################################
         // MAGIC WAY !!!
         // 1. Run cmd: "php artisan make:policy BlogPostPolicy --model=BlogPost"
         // 2. Add this to $policies array:
-        //       'App\Models\BlogPost' => 'App\Policies\BlogPostPolicy',
-        //##############################################################
+        //       'App\Models\BlogPost' => 'App\Policies\BlogPostPolicy'
+        //
+        // 3. Config. BlogPostPolicy.php for each functions needed to use a policy.
+        // ex: Allow logged user to delete only his own blog posts
+        //     --------------------------------------------------------------
+        //      public function delete(User $user, BlogPost $blogPost)
+        //      {
+        //          return $user->id == $blogPost->user_id;
+        //      }
+        //
+        // 4. In BlogPostController.php, simply call $this->authorize($post) like this example:
+        //      public function destroy($id)
+        //      {
+        //          $post = BlogPost::findOrFail($id);
+        //          $this->authorize($post); //<--- Check user autorization MAGIC-WAY!
+        //          $post->delete();
+        //          session()->flash('status', 'The blog post #' . $id . ' was deleted!');
+        //          return redirect()->route('posts.index');
+        //      }
+        //######################################################################
 
         //-------------- BASIC WAY to define a Gate -------------------------------------------------
         Gate::define('home.secret', function ($user) {

@@ -63,6 +63,8 @@ Route::get('/single', AboutController::class);
 Route::resource('posts', PostController::class)
     ->only(['index', 'show', 'create', 'store', 'edit', 'update', 'destroy']);
 
+// Route::get('/posts/{id}/restore', [PostController::class, 'restore'])->name('posts.restore'); // TODO
+
 // Route::get('/posts', function () use ($posts) {
 //     // dd(request()->all());
 //     dd((int)request()->query('page', 1));
