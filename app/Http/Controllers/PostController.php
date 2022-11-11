@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\BlogPost;
 use Illuminate\Http\Request;
 use App\Http\Requests\PostRequest;
+use App\Models\User;
 // use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 
@@ -47,7 +48,9 @@ class PostController extends Controller
         return view('posts.index',
             [
                 'posts' => BlogPost::latest()->withCount('comments')->get(),
-                'mostCommented' => BlogPost::mostCommented()->take(5)->get()
+                'mostCommented' => BlogPost::mostCommented()->take(5)->get(),
+                'mostActiveUsers' => User::withMostBlogPosts()->take(5)->get(),
+                'mostActiveUsersLastMonth' => User::withMostBlogPostsLastMonth()->take(5)->get(),
             ]);
     }
 
@@ -201,6 +204,34 @@ class PostController extends Controller
         $post->delete();
 
         session()->flash('status', 'The blog post #' . $id . ' was deleted!');
+
+        return redirect()->route('posts.index');
+    }
+
+    public function destroy($id)
+    {
+        $post = BlogPost::findOrFail($id);
+        $this->authorize($post); // Magic way using registerPolicies()
+        $post->delete();
+        session()->flash('status', 'The blog post #' . $id . ' was deleted!');
+        return redirect()->route('posts.index');
+    }
+
+    /**
+     * Restore the specified blog post (Manually added by jddumas)
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function restore($id)
+    {
+        $post = BlogPost::findOrFail($id);
+
+        $this->authorize($post); // TO TEST with dd() with restore() method from BlogPostPolicy
+
+        $post->restore();
+
+        session()->flash('status', 'The blog post #' . $id . ' has been restored!');
 
         return redirect()->route('posts.index');
     }
