@@ -208,15 +208,6 @@ class PostController extends Controller
         return redirect()->route('posts.index');
     }
 
-    public function destroy($id)
-    {
-        $post = BlogPost::findOrFail($id);
-        $this->authorize($post); // Magic way using registerPolicies()
-        $post->delete();
-        session()->flash('status', 'The blog post #' . $id . ' was deleted!');
-        return redirect()->route('posts.index');
-    }
-
     /**
      * Restore the specified blog post (Manually added by jddumas)
      *
