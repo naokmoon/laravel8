@@ -55,6 +55,10 @@ class AuthServiceProvider extends ServiceProvider
             return $user->is_admin;
         });
 
+        // Gate::define('module.paysafe.admin', function ($user) {
+        //     return $user->role->id == 1;
+        // });
+
         // Gate::define('update-post', function ($user, $post) {
         //     return $user->id == $post->user_id;
         // });

@@ -47,7 +47,7 @@ class PostController extends Controller
         // return view('posts.index', ['posts' => BlogPost::all()]);
         return view('posts.index',
             [
-                'posts' => BlogPost::latest()->withCount('comments')->get(),
+                'posts' => BlogPost::latest()->withCount('comments')->with('user')->get(),
                 'mostCommented' => BlogPost::mostCommented()->take(5)->get(),
                 'mostActiveUsers' => User::withMostBlogPosts()->take(5)->get(),
                 'mostActiveUsersLastMonth' => User::withMostBlogPostsLastMonth()->take(5)->get(),
@@ -206,6 +206,10 @@ class PostController extends Controller
         session()->flash('status', 'The blog post #' . $id . ' was deleted!');
 
         return redirect()->route('posts.index');
+
+        // SHORT-HAND WAY! ->with('flash message');
+        //
+        // return redirect()->route('posts.index')->with('status', 'The blog post #' . $id . ' was deleted!');
     }
 
     /**

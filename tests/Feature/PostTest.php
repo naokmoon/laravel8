@@ -39,7 +39,7 @@ class PostTest extends TestCase
         // Create Dummy BlogPost
         $post = $this->createDummyBlogPost();
         // Create 4 comments for the BlogPost
-        Comment::factory()->count(4)->create([
+        Comment::factory(4)->create([
             'blog_post_id' => $post->id
         ]);
 
