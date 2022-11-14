@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Cache;
 
 class BlogPost extends Model
 {
@@ -45,12 +46,18 @@ class BlogPost extends Model
 
         // static::addGlobalScope(new LatestScope);
 
+        // Delete or restore child relations "Comments" when the blog post is deleted or restored
         static::deleting(function (BlogPost $blogPost) {
             $blogPost->comments()->delete();
         });
-
         static::restoring(function (BlogPost $blogPost) {
             $blogPost->comments()->restore();
+        });
+
+        // Reset cache on update of a blog post to be able getting the fresh data right after when we consult it in show() method.
+        // Otherwise, it would get data from OLD cache.
+        static::updating(function (BlogPost $blogPost) {
+            Cache::forget("blog-post-{$blogPost->id}");
         });
     }
 }
