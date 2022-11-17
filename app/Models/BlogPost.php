@@ -22,6 +22,11 @@ class BlogPost extends Model
         return $this->hasMany(Comment::class)->latest();
     }
 
+    public function tags()
+    {
+        return $this->belongsToMany(Tag::class);
+    }
+
     public function user()
     {
         return $this->belongsTo(User::class);

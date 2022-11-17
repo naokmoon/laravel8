@@ -37,13 +37,13 @@ class PostController extends Controller
         // DB::connection()->enableQueryLog();
         // dd(DB::getQueryLog());
 
-        $mostCommented = Cache::remember('blog-post-commented', 60, function () {
+        $mostCommented = Cache::remember('mostCommented', 60, function () {
             return BlogPost::mostCommented()->take(5)->get();
         });
-        $mostActiveUsers = Cache::remember('users-most-active', 60, function () {
+        $mostActiveUsers = Cache::remember('mostActive', 60, function () {
             return User::withMostBlogPosts()->take(5)->get();
         });
-        $mostActiveUsersLastMonth = Cache::remember('users-most-active-last-month', 60, function () {
+        $mostActiveUsersLastMonth = Cache::remember('mostActiveLastMonth', 60, function () {
             return User::withMostBlogPostsLastMonth()->take(5)->get();
         });
 
