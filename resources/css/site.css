@@ -1,3 +1,7 @@
+.badge-lg {
+    font-size: 0.8rem;
+}
+
 @media (max-width: 767px) {
     .btn-xs-block {
         display: block;

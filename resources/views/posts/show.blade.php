@@ -13,6 +13,9 @@
         Updated
     @endupdated
 
+    @tags(['tags' => $post->tags])
+    @endtags
+
     @badge(['show' => now()->diffInMinutes($post->created_at) < 30])
         New!
     @endbadge
