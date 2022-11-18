@@ -54,15 +54,17 @@ class BlogPost extends Model
         // Delete or restore child relations "Comments" when the blog post is deleted or restored
         static::deleting(function (BlogPost $blogPost) {
             $blogPost->comments()->delete();
+            Cache::forget("blog-post-{$blogPost->id}"); // Force cache to reset on delete of a blog post
         });
+
+        static::updating(function (BlogPost $blogPost) {
+            Cache::forget("blog-post-{$blogPost->id}"); // Force cache to reset on update of a blog post
+        });
+
         static::restoring(function (BlogPost $blogPost) {
             $blogPost->comments()->restore();
         });
 
-        // Reset cache on update of a blog post to be able getting the fresh data right after when we consult it in show() method.
-        // Otherwise, it would get data from OLD cache.
-        static::updating(function (BlogPost $blogPost) {
-            Cache::forget("blog-post-{$blogPost->id}");
-        });
+
     }
 }

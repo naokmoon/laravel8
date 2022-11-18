@@ -10,7 +10,7 @@
         {{-- Use PUT for updating --}}
         @method('PUT')
 
-        @include('posts.partials.form')
+        @include('posts._form')
 
         <div class="d-flex mt-2">
             <input type="submit" value="Save" class="btn btn-primary">

@@ -5,14 +5,16 @@
 @section('content')
     <h2>Create Blog Post</h2>
 
-    <form action="{{ route('posts.store') }}" method="POST">
+    <form method="POST" action="{{ route('posts.store') }}">
         @csrf
-        @include('posts.partials.form')
+
+        @include('posts._form')
+
         <div class="d-flex">
             <input type="submit" value="Create" class="btn btn-success btn-xs-block">
-            <div class="ml-2">
+            {{-- <div class="ml-2">
                 <a href="{{ route('posts.index') }}" class="btn btn-light">Cancel</a>
-            </div>
+            </div> --}}
         </div>
     </form>
 @endsection
