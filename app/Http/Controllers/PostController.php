@@ -9,6 +9,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Cache;
 // use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Storage;
 
 // Mapping of Controller method and Policy name used for user authorization when using $this->authorize($post)
 // [
@@ -39,10 +40,7 @@ class PostController extends Controller
 
         return view('posts.index',
         [
-            'posts' => BlogPost::latest()
-                ->withCount('comments')
-                ->with('user', 'tags')
-                ->get()
+            'posts' => BlogPost::latestWithRelations()->get()
         ]);
     }
 
@@ -94,7 +92,6 @@ class PostController extends Controller
         $model = $request->validated();
         $model['user_id'] = $request->user()->id;
 
-
         //--- Basic way without $fillable property
         // $post = new BlogPost();
         // $post->title = $model['title'];
@@ -102,6 +99,20 @@ class PostController extends Controller
         // $post->save();
         //--- Lazy way
         $post = BlogPost::create($model); // * Easier, but requires $fillable property to be setted
+
+        // Save thumbnail file
+        $hasFile = $request->hasFile('thumbnail');
+        if ($hasFile) {
+            $file = $request->file('thumbnail');
+            dump($file);
+            dump($file->getClientMimeType());
+            dump($file->getClientOriginalExtension());
+
+            $fileName = $post->id . "." . $file->guessExtension();
+            dump($file->storeAs('thumbnails', $fileName)); // Shortway to save on default configured disk
+            dump(Storage::disk('local')->putFileAs('thumbnails', $file, $fileName)); // Save on specific disk
+        }
+        die;
 
         $request->session()->flash('status', 'The blog post was created!');
 
