@@ -17,6 +17,11 @@ class BlogPost extends Model
 
     protected $fillable = ['title', 'content', 'user_id'];
 
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
     public function comments()
     {
         return $this->hasMany(Comment::class)->latest();
@@ -27,9 +32,9 @@ class BlogPost extends Model
         return $this->belongsToMany(Tag::class)->withTimestamps();
     }
 
-    public function user()
+    public function image()
     {
-        return $this->belongsTo(User::class);
+        return $this->hasOne(Image::class);
     }
 
     // public function scopeAbcLatest(Builder $query) // scopeLatest comes by default with Laravel now
@@ -64,7 +69,7 @@ class BlogPost extends Model
             Cache::forget("blog-post-{$blogPost->id}"); // Force cache to reset on delete of a blog post
         });
 
-        static::updating(function (BlogPost $blogPost) {
+        static::saving(function (BlogPost $blogPost) {
             Cache::forget("blog-post-{$blogPost->id}"); // Force cache to reset on update of a blog post
         });
 

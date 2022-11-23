@@ -5,8 +5,36 @@
 @section('content')
     <div class="row">
         <div class="col-8">
-            <h1>{{ $post->title }}</h1>
+            @if ($post->image)
+            <div style="background-image: url('{{ $post->image->url() }}'); min-height: 500px; color: white; text-align: center; background-attachment:fixed;">
+                <h1 style="padding-top: 100px; text-shadow: 1px 2px #000;">
+            @else
+                <h1>
+            @endif
+
+            <h1>
+                {{ $post->title }}
+                @badge(['show' => now()->diffInMinutes($post->created_at) < 30])
+                    Brand new Post!
+                @endbadge
+            </h1>
+
+            @if ($post->image)
+                </h1>
+                <form action="{{ route('posts.image.destroy', ['post' => $post->id, 'image' => $post->image->id]) }}" method="POST">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" onclick="confirmDelete()" class="btn btn-danger"><i class="fa fa-trash-o" title="Delete"></i></button>
+                </form>
+            </div>
+            @else
+                </h1>
+            @endif
+
             <p>{{ $post->content }}</p>
+
+            {{-- <img src="{{ $post->image->url() }}" /> --}}
+
             {{-- <p>Added {{ $post->created_at->diffForHumans() }}</p> --}}
             @updated(['date' => $post->created_at, 'by' => $post->user->name])
             @endupdated
@@ -18,9 +46,7 @@
             @tags(['tags' => $post->tags])
             @endtags
 
-            @badge(['show' => now()->diffInMinutes($post->created_at) < 30])
-                New!
-            @endbadge
+
 
             <p>Currently read by {{ $counter }} people</p>
 
@@ -45,4 +71,12 @@
 
 
     <a href="{{ route('posts.index') }}" class="btn btn-primary mt-4">Go back</a>
+
+    <script>
+        function confirmDelete() {
+            if (!confirm("Are you sure to delete this?")) {
+                event.preventDefault();
+            }
+        }
+    </script>
 @endsection

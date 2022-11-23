@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\BlogPost;
 use Illuminate\Http\Request;
 use App\Http\Requests\PostRequest;
+use App\Models\Image;
 use App\Models\User;
 use Illuminate\Support\Facades\Cache;
 // use Illuminate\Support\Facades\DB;
@@ -101,18 +102,12 @@ class PostController extends Controller
         $post = BlogPost::create($model); // * Easier, but requires $fillable property to be setted
 
         // Save thumbnail file
-        $hasFile = $request->hasFile('thumbnail');
-        if ($hasFile) {
-            $file = $request->file('thumbnail');
-            dump($file);
-            dump($file->getClientMimeType());
-            dump($file->getClientOriginalExtension());
-
-            $fileName = $post->id . "." . $file->guessExtension();
-            dump($file->storeAs('thumbnails', $fileName)); // Shortway to save on default configured disk
-            dump(Storage::disk('local')->putFileAs('thumbnails', $file, $fileName)); // Save on specific disk
+        if ($request->hasFile('thumbnail')) {
+            $path = $request->file('thumbnail')->store('thumbnails');
+            $post->image()->save(
+                Image::create(['path' => $path])
+            );
         }
-        die;
 
         $request->session()->flash('status', 'The blog post was created!');
 
@@ -136,7 +131,7 @@ class PostController extends Controller
         // ]);
 
         $blogPost = Cache::remember("blog-post-{$id}", 60, function() use ($id) {
-            return BlogPost::with('comments', 'tags', 'user', 'comments.user')
+            return BlogPost::with('comments', 'tags', 'user', 'image', 'comments.user')
                 ->findOrFail($id);
         });
 
@@ -188,6 +183,22 @@ class PostController extends Controller
 
         $model = $request->validated();
         $post->fill($model);
+
+        // Save thumbnail file
+        if ($request->hasFile('thumbnail')) {
+            $path = $request->file('thumbnail')->store('thumbnails');
+
+            if ($post->image) {
+                Storage::delete($post->image->path);
+                $post->image->path = $path; // Set new path to Model
+                $post->image()->save($post->image); // Save new path into DB
+            } else {
+                $post->image()->save(
+                    Image::create(['path' => $path])
+                );
+            }
+        }
+
         $post->save();
 
         $request->session()->flash('status', 'The blog post was updated!');
