@@ -3,6 +3,16 @@
 @section('title', 'Post ' . $post->title)
 
 @section('content')
+    <style>
+        #formImageDelete {
+            position: absolute;
+            top: 0;
+            right: 0;
+            margin-right: 15px;
+            /* z-index: 1; */
+        }
+    </style>
+
     <div class="row">
         <div class="col-8">
             @if ($post->image)
@@ -21,11 +31,14 @@
 
             @if ($post->image)
                 </h1>
-                <form action="{{ route('posts.image.destroy', ['post' => $post->id, 'image' => $post->image->id]) }}" method="POST">
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit" onclick="confirmDelete()" class="btn btn-danger"><i class="fa fa-trash-o" title="Delete"></i></button>
-                </form>
+
+                @can('delete', $post->image)
+                    <form id="formImageDelete" action="{{ route('posts.image.destroy', ['post' => $post->id, 'image' => $post->image->id]) }}" method="POST">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" onclick="confirmDelete()" class="btn btn-danger"><i class="fa fa-trash-o" title="Delete"></i></button>
+                    </form>
+                @endcan
             </div>
             @else
                 </h1>

@@ -22,4 +22,13 @@ class Image extends Model
     {
         return Storage::url($this->path);
     }
+
+    public static function boot()
+    {
+        parent::boot();
+
+        static::deleting(function (Image $image) {
+            Cache::forget("blog-post-{$image->blogPost->id}"); // Force cache to reset on attached blog post
+        });
+    }
 }
