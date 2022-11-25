@@ -1,8 +1,4 @@
 @import url(https://fonts.googleapis.com/css?family=Nunito);
-.badge-lg {
-    font-size: 0.8rem;
-}
-
 @media (max-width: 767px) {
     .btn-xs-block {
         display: block;
@@ -12369,4 +12365,12 @@ h3 {
     color: inherit;
     border-color: #dee2e6;
   }
+}
+.badge-lg {
+  font-size: 0.8rem;
+}
+
+.avatar {
+  width: 128px;
+  height: 128px;
 }

@@ -34,7 +34,7 @@ class BlogPost extends Model
 
     public function image()
     {
-        return $this->hasOne(Image::class);
+        return $this->morphOne(Image::class, 'imageable');
     }
 
     // public function scopeAbcLatest(Builder $query) // scopeLatest comes by default with Laravel now

@@ -9,6 +9,7 @@ use App\Http\Controllers\AboutController;
 use App\Http\Controllers\PostCommentController;
 use App\Http\Controllers\PostImageController;
 use App\Http\Controllers\PostTagController;
+use App\Http\Controllers\UserController;
 
 $posts = [
     1 => [
@@ -65,9 +66,9 @@ Route::get('/single', AboutController::class);
 
 Route::resource('posts', PostController::class)
     ->only(['index', 'show', 'create', 'store', 'edit', 'update', 'destroy']);
-
 Route::resource('posts.comments', PostCommentController::class)->only(['store']);
 Route::resource('posts.image', PostImageController::class)->only(['destroy']);
+Route::resource('users', UserController::class)->only(['show', 'edit', 'update']);
 
 Route::get('/posts/tag/{tag}', [PostTagController::class, 'index'])->name('posts.tags.index');
 
