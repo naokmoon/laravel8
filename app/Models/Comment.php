@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Scopes\LatestScope;
+use App\Traits\Taggable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -12,13 +13,13 @@ use Illuminate\Support\Facades\Cache;
 class Comment extends Model
 {
     use HasFactory;
-    use SoftDeletes;
+    use SoftDeletes, Taggable;
 
     protected $fillable = ['user_id', 'content'];
 
-    public function blogPost()
+    public function commentable()
     {
-        return $this->belongsTo(BlogPost::class);
+        return $this->morphTo();
     }
 
     public function user()
@@ -36,9 +37,11 @@ class Comment extends Model
         parent::boot();
 
         static::creating(function (Comment $comment) {
-            // Force cache to reset on creation of new comment
-            Cache::forget("blog-post-{$comment->blog_post_id}");
-            Cache::forget("mostCommented");
+            // Force cache to reset on creation of new comment for a blog post
+            if ($comment->commentable_type === BlogPost::class) {
+                Cache::forget("blog-post-{$comment->commentable_id}");
+                Cache::forget("mostCommented");
+            }
         });
 
         // static::addGlobalScope(new LatestScope);

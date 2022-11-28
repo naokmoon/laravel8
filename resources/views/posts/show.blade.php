@@ -65,16 +65,12 @@
 
             <h4>Comments</h4>
 
-            @include('comments._form')
-
-            @forelse ($post->comments as $comment)
-                <p class="m-1">{{ $comment->content }}</p>
-                {{-- <p class="text-muted">added {{ $comment->created_at->diffForHumans() }}</p> --}}
-                @updated(['date' => $comment->created_at, 'by' => $comment->user->name])
-                @endupdated
-            @empty
-                <p>No comments yet!</p>
-            @endforelse
+            {{-- Add comment to blog post --}}
+            @commentForm(['route' => route('posts.comments.store', ['post' => $post->id])])
+            @endcommentForm()
+            {{-- Show list of comments --}}
+            @commentList(['comments' => $post->comments])
+            @endcommentList
         </div>
 
         <div class="col-4">

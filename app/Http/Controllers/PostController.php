@@ -191,7 +191,7 @@ class PostController extends Controller
             if ($post->image) {
                 Storage::delete($post->image->path);
                 $post->image->path = $path; // Set new path to Model
-                $post->image()->save($post->image); // Save new path into DB
+                $post->image->save(); // Save new path into DB
             } else {
                 $post->image()->save(
                     Image::make(['path' => $path])

@@ -9,11 +9,12 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Cache;
+use App\Traits\Taggable;
 
 class BlogPost extends Model
 {
     use HasFactory;
-    use SoftDeletes;
+    use SoftDeletes, Taggable;
 
     protected $fillable = ['title', 'content', 'user_id'];
 
@@ -24,16 +25,13 @@ class BlogPost extends Model
 
     public function comments()
     {
-        return $this->hasMany(Comment::class)->latest();
-    }
-
-    public function tags()
-    {
-        return $this->belongsToMany(Tag::class)->withTimestamps();
+        // Equivalent to hasMany (OneToMany Polymorphic Relation)
+        return $this->morphMany(Comment::class, 'commentable')->latest();
     }
 
     public function image()
     {
+        // Equivalent to hasOne (OneToOne Polymorphic Relation)
         return $this->morphOne(Image::class, 'imageable');
     }
 

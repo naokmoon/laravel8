@@ -36,11 +36,14 @@ class PostTest extends TestCase
 
     public function testSee1BlogPostWithComments()
     {
-        // Create Dummy BlogPost
+        // Arrange
+        $user = $this->user();
+
         $post = $this->createDummyBlogPost();
-        // Create 4 comments for the BlogPost
         Comment::factory(4)->create([
-            'blog_post_id' => $post->id
+            'commentable_id' => $post->id,
+            'commentable_type' => BlogPost::class,
+            'user_id' => $user->id
         ]);
 
         $this->assertDatabaseHas('blog_posts', [
@@ -89,6 +92,7 @@ class PostTest extends TestCase
         // Arrange
         $user = $this->user();
         $post = $this->createDummyBlogPost($user->id);
+
         $this->assertDatabaseHas('blog_posts', [
             'title' => 'New title',
             'content' => 'Content of the blog post'

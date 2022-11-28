@@ -8,9 +8,11 @@
         @csrf
         @method('PUT')
 
+        @errors @enderrors
+
         <div class="row">
             <div class="col-4">
-                <img src="" class="img-thumbnail avatar" />
+                <img src="{{ $user->image ? $user->image->url() : '' }}" class="img-thumbnail avatar" />
 
                 <div class="card mt-4">
                     <div class="card-body">
@@ -22,7 +24,7 @@
             <div class="col-8">
                 <div class="form-group">
                     <label>Name:</label>
-                    <input class="form-control" value="" type="text" name="name" />
+                    <input class="form-control" value="{{ old('name', optional($user ?? null)->name) }}" type="text" name="name" />
                 </div>
 
                 <div class="form-group">

@@ -47,9 +47,20 @@ class User extends Authenticatable
         return $this->hasMany(BlogPost::class);
     }
 
+    /**
+     * To get comments for the actual author
+     */
     public function comments()
     {
         return $this->hasMany(Comment::class);
+    }
+
+    /**
+     * To get all comments that belongs to the user interface
+     */
+    public function commentsOn()
+    {
+        return $this->morphMany(Comment::class, 'commentable')->latest();
     }
 
     public function image()
