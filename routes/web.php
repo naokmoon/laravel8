@@ -74,6 +74,10 @@ Route::resource('users.comments', UserCommentController::class)->only(['store'])
 
 Route::get('/posts/tag/{tag}', [PostTagController::class, 'index'])->name('posts.tags.index');
 
+Route::get('mailable', function () {
+    $comment = App\Models\Comment::find(1);
+    return new App\Mail\CommentPostedMarkdown($comment);
+});
 
 // Route::get('/posts/{id}/restore', [PostController::class, 'restore'])->name('posts.restore'); // TODO
 
