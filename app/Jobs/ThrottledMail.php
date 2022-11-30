@@ -10,10 +10,15 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Redis;
 
 class ThrottledMail implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+
+    // public $tries = 15;
+    // public $timeout = 30;
 
     public $mail;
     public $user;
@@ -40,6 +45,6 @@ class ThrottledMail implements ShouldQueue
             Mail::to($this->user)->send($this->mail);
         }, function () {
             return $this->release(5);
-        })
+        });
     }
 }
