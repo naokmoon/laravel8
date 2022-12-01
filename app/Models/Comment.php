@@ -2,13 +2,10 @@
 
 namespace App\Models;
 
-use App\Scopes\LatestScope;
 use App\Traits\Taggable;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Support\Facades\Cache;
 
 class Comment extends Model
 {
@@ -36,13 +33,13 @@ class Comment extends Model
     {
         parent::boot();
 
-        static::creating(function (Comment $comment) {
-            // Force cache to reset on creation of new comment for a blog post
-            if ($comment->commentable_type === BlogPost::class) {
-                Cache::forget("blog-post-{$comment->commentable_id}");
-                Cache::forget("mostCommented");
-            }
-        });
+        // static::creating(function (Comment $comment) {
+        //     // Force cache to reset on creation of new comment for a blog post
+        //     if ($comment->commentable_type === BlogPost::class) {
+        //         Cache::forget("blog-post-{$comment->commentable_id}");
+        //         Cache::forget("mostCommented");
+        //     }
+        // });
 
         // static::addGlobalScope(new LatestScope);
     }

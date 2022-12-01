@@ -56,25 +56,22 @@ class BlogPost extends Model
     public static function boot()
     {
         static::addGlobalScope(new DeletedAdminScope);
-
         parent::boot();
 
         // static::addGlobalScope(new LatestScope);
 
-        // Delete or restore child relations "Comments" when the blog post is deleted or restored
-        static::deleting(function (BlogPost $blogPost) {
-            $blogPost->comments()->delete();
-            Cache::forget("blog-post-{$blogPost->id}"); // Force cache to reset on delete of a blog post
-        });
-
-        static::saving(function (BlogPost $blogPost) {
-            Cache::forget("blog-post-{$blogPost->id}"); // Force cache to reset on update of a blog post
-        });
-
-        static::restoring(function (BlogPost $blogPost) {
-            $blogPost->comments()->restore();
-        });
-
-
+        // Moved all logic in BlogPostObserver instead
+        //
+        // // Delete or restore child relations "Comments" when the blog post is deleted or restored
+        // static::deleting(function (BlogPost $blogPost) {
+        //     $blogPost->comments()->delete();
+        //     Cache::forget("blog-post-{$blogPost->id}"); // Force cache to reset on delete of a blog post
+        // });
+        // static::saving(function (BlogPost $blogPost) {
+        //     Cache::forget("blog-post-{$blogPost->id}"); // Force cache to reset on update of a blog post
+        // });
+        // static::restoring(function (BlogPost $blogPost) {
+        //     $blogPost->comments()->restore();
+        // });
     }
 }

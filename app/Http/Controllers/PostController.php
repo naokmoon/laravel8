@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\BlogPostPosted;
 use App\Models\BlogPost;
 use Illuminate\Http\Request;
 use App\Http\Requests\PostRequest;
@@ -108,6 +109,8 @@ class PostController extends Controller
                 Image::make(['path' => $path])
             );
         }
+
+        event(new BlogPostPosted($post));
 
         $request->session()->flash('status', 'The blog post was created!');
 
