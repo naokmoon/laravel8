@@ -59,9 +59,7 @@
             @tags(['tags' => $post->tags])
             @endtags
 
-
-
-            <p>Currently read by {{ $counter }} people</p>
+            <p>{{ trans_choice('messages.people.reading', $counter) }}</p>
 
             <h4>Comments</h4>
 

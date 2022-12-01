@@ -38,10 +38,9 @@
 
                     <!-- Right Side Of Navbar -->
                     <ul class="navbar-nav ml-auto">
-                        <a class="p-2 text-dark" href="{{ route('home.index') }}">Home</a>
-                        <a class="p-2 text-dark" href="{{ route('home.contact') }}">Contact</a>
-
-                        <a class="p-2 text-dark" href="{{ route('posts.index') }}">Blog Posts</a>
+                        <a class="p-2 text-dark" href="{{ route('home.index') }}">{{ __('Home') }}</a>
+                        <a class="p-2 text-dark" href="{{ route('home.contact') }}">{{ __('Contact') }}</a>
+                        <a class="p-2 text-dark" href="{{ route('posts.index') }}">{{ __('Blog Posts') }}</a>
 
                         @guest
                             {{-- Not logged in menu --}}

@@ -5,7 +5,7 @@
 @section('content')
     <h2>Posts</h2>
 
-    <a href="{{ route('posts.create') }}" class="btn btn-success mb-2"><i class="fa fa-plus"></i> Create post</a>
+    <a href="{{ route('posts.create') }}" class="btn btn-success mb-2"><i class="fa fa-plus"></i> {{ __('Add') }}</a>
 
     <div class="row">
         {{-- <div class="col-8">
@@ -54,11 +54,13 @@
                     @tags(['tags' => $post->tags])
                     @endtags
 
-                    @if($post->comments_count)
+                    {{-- @if($post->comments_count)
                         <p>{{ $post->comments_count }} comments</p>
                     @else
                         <p>No comments yet!</p>
-                    @endif
+                    @endif --}}
+
+                    {{ trans_choice('messages.comments', $post->comments_count) }}
 
                     <div class="d-flex">
                         @can('update', $post)
