@@ -58,9 +58,10 @@ class AppServiceProvider extends ServiceProvider
         });
             // or ->bind for new Instance() every time it's called
 
-        $this->app->singleton(Counter::class, function ($app) {
-            return new Counter(env('COUNTER_TIMEOUT'));
-        });
+        $this->app->bind(
+            'App\Contracts\CounterContract',
+            Counter::class
+        );
 
         // $this->app->when(Counter::class)
         //     ->needs('$timeout')

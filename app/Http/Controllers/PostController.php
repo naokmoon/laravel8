@@ -2,13 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Contracts\CounterContract;
 use App\Events\BlogPostPosted;
 use App\Models\BlogPost;
 use Illuminate\Http\Request;
 use App\Http\Requests\PostRequest;
 use App\Models\Image;
-use App\Models\User;
-use App\Services\Counter;
 use Illuminate\Support\Facades\Cache;
 // use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
@@ -27,7 +26,7 @@ class PostController extends Controller
 {
     private $counter;
 
-    public function __construct(Counter $counter)
+    public function __construct(CounterContract $counter)
     {
         $this->middleware('auth')
             ->only(['create', 'store', 'edit', 'update', 'destroy']);
