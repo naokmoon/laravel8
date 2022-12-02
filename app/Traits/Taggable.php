@@ -20,7 +20,7 @@ trait Taggable
 
     public function tags()
     {
-        // Equivalent to belongsToMany (ManyToMany Polymorphic Relation using a Pivot Table 'taggables')
+        // Used for ManyToMany Polymorphic Relation using a Pivot Table 'taggables')
         return $this->morphToMany(Tag::class, 'taggable')->withTimestamps();
     }
 

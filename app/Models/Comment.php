@@ -14,6 +14,8 @@ class Comment extends Model
 
     protected $fillable = ['user_id', 'content'];
 
+    protected $hidden = ['deleted_at', 'commentable_type', 'commentable_id', 'user_id']; // Hide these fields for conversion to Array/JSON
+
     public function commentable()
     {
         return $this->morphTo();

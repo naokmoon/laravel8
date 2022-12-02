@@ -67,7 +67,7 @@ Route::get('/single', AboutController::class);
 
 Route::resource('posts', PostController::class)
     ->only(['index', 'show', 'create', 'store', 'edit', 'update', 'destroy']);
-Route::resource('posts.comments', PostCommentController::class)->only(['store']);
+Route::resource('posts.comments', PostCommentController::class)->only(['index', 'store']);
 Route::resource('posts.image', PostImageController::class)->only(['destroy']);
 Route::resource('users', UserController::class)->only(['show', 'edit', 'update']);
 Route::resource('users.comments', UserCommentController::class)->only(['store']);
