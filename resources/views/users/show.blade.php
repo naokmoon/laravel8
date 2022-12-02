@@ -9,6 +9,8 @@
         <div class="col-8">
             <h3>{{ $user->name }}</h3>
 
+            <p>{{ trans_choice('messages.people.reading', $counter) }}</p>
+
             @errors @enderrors
 
             {{-- Add comment to user profile --}}

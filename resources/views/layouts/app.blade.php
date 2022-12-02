@@ -54,6 +54,14 @@
                             @endif
                         @else
                             {{-- Authenticated user links --}}
+                            <a class="p-2 text-dark"
+                                href="{{ route('users.show', ['user' => Auth::user()->id]) }}">
+                                {{ __('Profile') }}
+                            </a>
+                            <a class="p-2 text-dark"
+                                href="{{ route('users.edit', ['user' => Auth::user()->id]) }}">
+                                {{ __('Edit Profile') }}
+                            </a>
                             <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle text-dark" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                                     {{ Auth::user()->name }}

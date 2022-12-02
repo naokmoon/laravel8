@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests\PostRequest;
 use App\Models\Image;
 use App\Models\User;
+use App\Services\Counter;
 use Illuminate\Support\Facades\Cache;
 // use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
@@ -24,10 +25,15 @@ use Illuminate\Support\Facades\Storage;
 // ]
 class PostController extends Controller
 {
-    public function __construct()
+    private $counter;
+
+    public function __construct(Counter $counter)
     {
         $this->middleware('auth')
             ->only(['create', 'store', 'edit', 'update', 'destroy']);
+        // $this->middleware('locale'); // Not required, because this middleware is public to all Web Route in Kernel
+
+        $this->counter = $counter;
     }
 
     /**
@@ -138,9 +144,11 @@ class PostController extends Controller
                 ->findOrFail($id);
         });
 
+        // $counter = resolve(Counter::class);
+
         return view('posts.show', [
             'post' => $blogPost,
-            'counter' => $this->getCounter($id),
+            'counter' => $this->counter->increment("blog-post-{$id}", ['blog-post']),
         ]);
     }
 
@@ -254,50 +262,5 @@ class PostController extends Controller
         session()->flash('status', 'The blog post #' . $id . ' has been restored!');
 
         return redirect()->route('posts.index');
-    }
-
-    /**
-     * Get counter of users actually reading the blog post
-     *
-     * @param int $id
-     * @return int
-     */
-    private function getCounter($id)
-    {
-        $sessionId = session()->getId();
-        $counterKey = "blog-post-{$id}-counter";
-        $usersKey = "blog-post-{$id}-users";
-
-        $users = Cache::get($usersKey, []);
-        $usersUpdate = [];
-        $difference = 0;
-        $now = now();
-
-        foreach ($users as $userSessionId => $lastVisitTime) {
-            if ($now->diffInMinutes($lastVisitTime) >= 1) {
-                $difference--;
-            } else {
-                $usersUpdate[$userSessionId] = $lastVisitTime;
-            }
-        }
-
-        if (
-            !array_key_exists($sessionId, $users)
-            || $now->diffInMinutes($users[$sessionId]) >= 1
-        ) {
-            $difference++;
-        }
-
-        $usersUpdate[$sessionId] = $now;
-        Cache::forever($usersKey, $usersUpdate);
-
-        if (! Cache::has($counterKey)) {
-            Cache::forever($counterKey, 1);
-        } else {
-            Cache::increment($counterKey, $difference);
-        }
-
-        $counter = Cache::get($counterKey);
-        return $counter;
     }
 }
