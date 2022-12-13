@@ -8,6 +8,7 @@ use App\Http\Requests\CommentRequest;
 use Illuminate\Http\Request;
 use App\Models\BlogPost;
 use App\Http\Resources\Comment as CommentResource;
+use App\Models\Comment;
 
 class PostCommentController extends Controller
 {
@@ -24,6 +25,7 @@ class PostCommentController extends Controller
     public function index(BlogPost $post, Request $request)
     {
         $perPage = $request->input('per_page') ?? 15;
+
         return CommentResource::collection(
             $post->comments()->with('user')->paginate($perPage)->appends(
                 [
@@ -39,7 +41,7 @@ class PostCommentController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(CommentRequest $request, BlogPost $post)
+    public function store(BlogPost $post, CommentRequest $request)
     {
         $comment = $post->comments()->create([
             'content' => $request->input('content'),
@@ -56,9 +58,9 @@ class PostCommentController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(BlogPost $post, Comment $comment)
     {
-        //
+        return new CommentResource($comment);
     }
 
     /**
@@ -68,9 +70,14 @@ class PostCommentController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(BlogPost $post, Comment $comment, CommentRequest $request)
     {
-        //
+        $this->authorize($comment);
+        $comment->content = $request->input('content');
+        $comment->save();
+
+        return new CommentResource($comment);
+
     }
 
     /**
@@ -79,8 +86,11 @@ class PostCommentController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(BlogPost $post, Comment $comment)
     {
-        //
+        $this->authorize($comment);
+        $comment->delete();
+
+        return response()->noContent();
     }
 }
