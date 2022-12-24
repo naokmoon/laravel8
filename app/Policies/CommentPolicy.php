@@ -65,6 +65,7 @@ class CommentPolicy
      */
     public function delete(User $user, Comment $comment)
     {
+        //return true;
         return $comment->user_id = $user->id;
     }
 

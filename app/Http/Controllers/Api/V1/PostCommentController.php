@@ -9,12 +9,13 @@ use Illuminate\Http\Request;
 use App\Models\BlogPost;
 use App\Http\Resources\Comment as CommentResource;
 use App\Models\Comment;
+use Illuminate\Support\Facades\Auth;
 
 class PostCommentController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth:api')->only(['store']);
+        $this->middleware('auth:api')->only(['store', 'delete']);
     }
 
     /**
