@@ -13,11 +13,26 @@ class PostCommentController extends Controller
         $this->middleware('auth')->only(['store']);
     }
 
+    
+    /**
+     * Retrieves all comments for a given blog post.
+     *
+     * @param BlogPost $post The blog post object.
+     * @return Illuminate\Database\Eloquent\Collection The collection of comments with user information.
+     */
     public function index(BlogPost $post)
     {
         return $post->comments()->with('user')->get();
     }
 
+
+    /**
+     * Store a new comment for a blog post.
+     *
+     * @param CommentRequest $request The request object containing the comment data.
+     * @param BlogPost $post The blog post the comment is for.
+     * @return \Illuminate\Http\RedirectResponse The redirect response back to the previous page.
+     */
     public function store(CommentRequest $request, BlogPost $post)
     {
         $comment = $post->comments()->create([
