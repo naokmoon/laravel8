@@ -13,7 +13,7 @@ class PostCommentController extends Controller
         $this->middleware('auth')->only(['store']);
     }
 
-    
+
     /**
      * Retrieves all comments for a given blog post.
      *
